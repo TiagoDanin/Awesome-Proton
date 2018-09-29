@@ -1,0 +1,9 @@
+{
+	"title": "AirMech Strike",
+	"status": "Not Compatible",
+	"user": "Tiago Danin",
+	"id": "206500",
+	"proton": "3.7",
+	"pc": "AMD E-450",
+	"note": "Error: Cannot create shadow depth buffer"
+}
