@@ -1,0 +1,32 @@
+{
+  "name": "awesome-proton",
+  "version": "1.0.0",
+  "description": "List of games tested with Proton (Tool for Steam Client on Linux)",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TiagoDanin/Awesome-Proton.git"
+  },
+  "keywords": [
+    "proton",
+    "awesome",
+    "awesome-list",
+    "steam",
+    "games",
+    "list"
+  ],
+  "author": "Tiago Danin",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/TiagoDanin/Awesome-Proton/"
+  },
+  "homepage": "https://github.com/TiagoDanin/Awesome-Proton#readme",
+  "dependencies": {
+    "chokidar": "^2.0.4",
+    "load-json-file": "^5.0.0",
+    "mustache": "^2.3.2"
+  }
+}
