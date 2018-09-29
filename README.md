@@ -30,7 +30,7 @@ Contributions welcome! Read the [contribution guidelines](contributing.md) first
 
 ### Add Test
 
-Create an 'JSON' file in `tests/name-of-game-date.json`
+Create an JSON file in `tests/name-of-game-date.json`
 
 ```javascript
 {
