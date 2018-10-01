@@ -1,0 +1,9 @@
+{
+	"title": "Name of Game",
+	"status": "Compatible", //Compatible, Partially Compatible or Not Compatible
+	"user": "Your Name",
+	"id": "steam id",
+	"proton": "1.0", //Proton version
+	"pc": "Intel Core i2000", //GPU, CPU, OS...
+	"note": "" //Problem, Game config...
+}
