@@ -4,6 +4,19 @@ const mustache = require('mustache')
 const testFiles = fs.readdirSync('./tests/')
 const template = fs.readFileSync('template.md').toString()
 
+
+
+function getName(id){
+	for (file of testFiles) {
+		var json = JSON.parse(fs.readFileSync(`tests/${file}`).toString())
+		if (json.id === id){
+			return json.title.toString();
+		}
+	}
+	return "Invalid ID";
+}
+
+
 var data = {
 	status: [
 		{
