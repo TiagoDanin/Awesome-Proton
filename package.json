@@ -27,6 +27,7 @@
   "dependencies": {
     "chokidar": "^2.0.4",
     "load-json-file": "^5.0.0",
-    "mustache": "^2.3.2"
+    "mustache": "^2.3.2",
+    "steamapi": "^2.0.2"
   }
 }

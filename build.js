@@ -1,5 +1,6 @@
 const fs = require('fs')
 const mustache = require('mustache')
+const SteamAPI = require('steamapi')
 
 const testFiles = fs.readdirSync('./tests/')
 const template = fs.readFileSync('template.md').toString()
@@ -45,3 +46,24 @@ for (status of data.status) {
 	}
 }
 fs.writeFileSync('README.md', mustache.render(template, data))
+
+
+const steam = new SteamAPI('steam token')
+
+const getGameName = id => {
+
+	testFiles.forEach(
+		file => {
+			const data = JSON.parse(fs.readFileSync(`tests/${file}`).toString())
+			if (data.id === id) {
+				steam.getGameDetails(id)
+					.then(
+						data => {
+							return data.name
+						}
+					)	
+			}
+		}
+	)
+	return "ID not found"
+}
