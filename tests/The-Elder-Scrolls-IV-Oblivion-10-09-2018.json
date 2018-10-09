@@ -1,9 +1,8 @@
 {
 	"title": "The Elder Scrolls IV: Oblivion",
-	"status": "Compatible", //Compatible, Partially Compatible or Not Compatible
+	"status": "Compatible",
 	"user": "Tunap",
-	"id": "N/A",
-	"proton": "3.7-6", //Proton version
-	"pc": "Intel® Core™ i5-7200U, GeForce 940MX/PCIe/SSE2, Ubuntu 18.04", //GPU, CPU, OS...
-	"note": "" //Problem, Game config...
+	"id": "22330",
+	"proton": "3.7-6",
+	"pc": "Intel® Core™ i5-7200U, GeForce 940MX/PCIe/SSE2, Ubuntu 18.04"
 }
