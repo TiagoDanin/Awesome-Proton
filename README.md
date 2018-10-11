@@ -9,10 +9,6 @@
 - [Not Compatible](#not-compatible)
 
 ## Compatible
-- [](https://store.steampowered.com/app/184522815)
-> Proton 3.7-6 - Intel® Core™ i5-3210M CPU @ 2.50GHz × 4</br> 
-- [](https://store.steampowered.com/app/428430)
-> Proton 3.7 - AMD E-450</br> 
 - [](https://store.steampowered.com/app/384150)
 > Proton 3.7 - AMD E-450</br> 
 
@@ -21,7 +17,7 @@
 ## Not Compatible
 - [](https://store.steampowered.com/app/206500)
 > Proton 3.7 - AMD E-450</br> Note: Error: Cannot create shadow depth buffer</br>
-- [](https://store.steampowered.com/app/76561198253480323)
+- [](https://store.steampowered.com/app/291410)
 > Proton 3.7-7 - Intel i5-5200U</br> Note: White Screen on startup</br>
 - [](https://store.steampowered.com/app/649900)
 > Proton 3.7 - AMD E-450</br> Note: Error: Doesn&#39;t open</br>

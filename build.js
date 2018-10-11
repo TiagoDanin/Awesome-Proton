@@ -36,34 +36,62 @@ for (file of testFiles) {
 }
 
 const steam = new SteamAPI(process.env.STEAM_API_KEY)
+const getGame = id => steam.getGameDetails(id, true)
+const appReg = /^\d{1,6}$/;
 
-const getGameName = id => {
-	testFiles.forEach(
-		file => {
-			const data = JSON.parse(fs.readFileSync(`tests/${file}`).toString())
-			if (data.id === id) {
-				steam.getGameDetails(id)
-					.then(
-						data => {
-							return data.name
-						}
-					)	
-			}
-		}
+const gameNames = Promise.all(
+	testFiles.map(
+		filename => JSON.parse(fs.readFileSync(`tests/${filename}`).toString())
+	).filter(
+		json => appReg.test(json.id)
+	).map(
+		json => getGame(json.id)
+	).map(
+		promise => promise.catch(() => false)
 	)
+).then(
+	games => games.filter(game => !!game)
+).then(
+	games => {
+		status = data.status.map(
+			stat => ({
+				...stat,
+				tests: stat.tests.map(
+					test => ({
+						...test,
+						game: games.find(
+							game => game.steam_appid === parseInt(test.id, 10)
+						)
+					})
+				).filter(
+					test => !!test.game
+				).map(
+					test => {
+						const {
+							game,
+							...rest
+						} = test;
 
-	throw new Error('Invalid ID. Not found.')
-}
+						return {
+							...rest,
+							name: game.name
+						}
+					}
+				).sort((a, b) => {
+					var indexA = a.name.toUpperCase()
+					var indexB = b.name.toUpperCase()
+					if (indexA < indexB) { return -1 }
+					if (indexA > indexB) { return  1 }
+					return 0
+				})
+			})
+		)
 
-for (status of data.status) {
-	if (status.tests.length != 0) {
-		status.tests.sort((a, b) => {
-			var indexA = getGameName(a.id).toUpperCase()
-			var indexB = getGameName(b.id).toUpperCase()
-			if (indexA < indexB) { return -1 }
-			if (indexA > indexB) { return  1 }
-			return 0
-		})
+		fs.writeFileSync('README.md', mustache.render(template, { status }))
 	}
-}
-fs.writeFileSync('README.md', mustache.render(template, data))
+)
+
+
+
+
+
