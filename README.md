@@ -9,19 +9,19 @@
 - [Not Compatible](#not-compatible)
 
 ## Compatible
-- [Endorlight](https://store.steampowered.com/app/428430)
-> Proton 3.7 - AMD E-450</br> 
-- [TeraBlaster](https://store.steampowered.com/app/384150)
+- [](https://store.steampowered.com/app/384150)
 > Proton 3.7 - AMD E-450</br> 
 
 ## Partially Compatible
 
 ## Not Compatible
-- [AirMech Strike](https://store.steampowered.com/app/206500)
+- [](https://store.steampowered.com/app/206500)
 > Proton 3.7 - AMD E-450</br> Note: Error: Cannot create shadow depth buffer</br>
-- [Mini Guns - Omega Wars](https://store.steampowered.com/app/649900)
+- [](https://store.steampowered.com/app/291410)
+> Proton 3.7-7 - Intel i5-5200U</br> Note: White Screen on startup</br>
+- [](https://store.steampowered.com/app/649900)
 > Proton 3.7 - AMD E-450</br> Note: Error: Doesn&#39;t open</br>
-- [X-COM: UFO Defense](https://store.steampowered.com/app/7760)
+- [](https://store.steampowered.com/app/7760)
 > Proton 3.7 - AMD E-450</br> Note: Error: Black screen</br>
 
 ## Contribute
