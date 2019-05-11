@@ -27,6 +27,6 @@
   "dependencies": {
     "chokidar": "^3.0.0",
     "load-json-file": "^6.0.0",
-    "mustache": "^3.0.0"
+    "mustache": "^3.0.1"
   }
 }
