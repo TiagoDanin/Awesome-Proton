@@ -26,7 +26,7 @@
   "homepage": "https://github.com/TiagoDanin/Awesome-Proton#readme",
   "dependencies": {
     "chokidar": "^3.4.2",
-    "load-json-file": "^6.2.0",
+    "load-json-file": "^7.0.1",
     "mustache": "^4.2.0"
   }
 }
