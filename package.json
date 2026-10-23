@@ -1,32 +1,197 @@
-{
-  "name": "awesome-proton",
-  "version": "1.0.0",
-  "description": "List of games tested with Proton (Tool for Steam Client on Linux)",
-  "main": "build.js",
-  "scripts": {
-    "build": "node build.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TiagoDanin/Awesome-Proton.git"
-  },
-  "keywords": [
-    "proton",
-    "awesome",
-    "awesome-list",
-    "steam",
-    "games",
-    "list"
-  ],
-  "author": "Tiago Danin",
-  "license": "CC0-1.0",
-  "bugs": {
-    "url": "https://github.com/TiagoDanin/Awesome-Proton/"
-  },
-  "homepage": "https://github.com/TiagoDanin/Awesome-Proton#readme",
-  "dependencies": {
-    "chokidar": "^3.4.2",
-    "load-json-file": "^6.2.0",
-    "mustache": "^4.2.0"
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+umask 077
+
+_CLEANUP_RAN=0
+
+log() {
+  printf '[INFO] %s\n' "$*"
+}
+
+error() {
+  printf '[ERROR] %s\n' "$*" >&2
+}
+
+error_handler() {
+  local exit_code="$1"
+  local line_no="$2"
+  local command="$3"
+
+  trap - ERR
+
+  error "Linha=$line_no | Código=$exit_code | Comando=$command"
+  exit "$exit_code"
+}
+
+cleanup() {
+  local status="${1:-0}"
+
+  if (( _CLEANUP_RAN != 0 )); then
+    return 0
+  fi
+
+  _CLEANUP_RAN=1
+
+  trap - EXIT ERR INT TERM
+
+  if [[ -n "${TEST_MARKER_FILE:-}" ]]; then
+    touch -- "$TEST_MARKER_FILE" || {
+      error "Falha ao criar marcador de teste."
+      (( status == 0 )) && status=1
+    }
+  fi
+
+  log "Limpeza concluída."
+  return "$status"
+}
+
+on_exit() {
+  local status="$?"
+
+  if cleanup "$status"; then
+    exit "$status"
+  else
+    local cleanup_status="$?"
+    exit "$cleanup_status"
+  fi
+}
+
+on_signal() {
+  case "$1" in
+    INT) exit 130 ;;
+    TERM) exit 143 ;;
+    *) exit 1 ;;
+  esac
+}
+
+trap 'error_handler "$?" "$LINENO" "$BASH_COMMAND"' ERR
+trap 'on_signal INT' INT
+trap 'on_signal TERM' TERM
+trap on_exit EXIT
+
+resolve_path() {
+  local path="$1"
+
+  if command -v realpath >/dev/null 2>&1; then
+    realpath -- "$path"
+  elif command -v readlink >/dev/null 2>&1 && readlink -f / >/dev/null 2>&1; then
+    readlink -f -- "$path"
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$path"
+  else
+    error "Não foi possível resolver: $path"
+    return 1
+  fi
+}
+
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || {
+    error "Comando não encontrado: $1"
+    return 2
   }
 }
+
+require_file() {
+  [[ -f "$1" ]] || {
+    error "Arquivo não encontrado: $1"
+    return 3
+  }
+}
+
+require_executable() {
+  [[ -f "$1" && -x "$1" ]] || {
+    error "Executável inválido ou ausente: $1"
+    return 3
+  }
+}
+
+require_directory() {
+  [[ -d "$1" ]] || {
+    error "Diretório não encontrado: $1"
+    return 4
+  }
+}
+
+initialize_paths() {
+  local script_path
+  local script_dir
+  local repo_path
+
+  script_path="$(resolve_path "$0")"
+  script_dir="$(dirname -- "$script_path")"
+
+  if command -v git >/dev/null 2>&1 &&
+     git -C "$script_dir" rev-parse --show-toplevel >/dev/null 2>&1; then
+    repo_path="$(git -C "$script_dir" rev-parse --show-toplevel)"
+  else
+    repo_path="$(cd "$script_dir" && pwd -P)"
+  fi
+
+  readonly SCRIPT_PATH="$script_path"
+  readonly REPO_PATH="$repo_path"
+
+  readonly PROFILE_PATH="$REPO_PATH/engine/src/out/host_profile"
+  readonly GN="$REPO_PATH/engine/src/flutter/tools/gn"
+  readonly LICENSE_CPP="$PROFILE_PATH/licenses_cpp"
+  readonly WORKING_DIR="$REPO_PATH/engine/src"
+
+  readonly LICENSES_PATH="$REPO_PATH/engine/src/flutter/sky/packages/sky_engine/LICENSE"
+  readonly DATA_PATH="$REPO_PATH/engine/src/flutter/tools/licenses_cpp/data"
+}
+
+validate_dependencies() {
+  require_cmd python3
+  require_cmd gclient
+  require_cmd ninja
+
+  require_executable "$GN"
+
+  require_directory "$WORKING_DIR"
+  require_directory "$PROFILE_PATH"
+  require_directory "$DATA_PATH"
+
+  require_file "$LICENSES_PATH"
+}
+
+sync_dependencies() {
+  log "Sincronizando dependências."
+  gclient sync --verbose
+}
+
+generate_build_files() {
+  log "Gerando arquivos GN."
+  "$GN" --unoptimized
+}
+
+build_license_generator() {
+  log "Compilando licenses_cpp."
+  ninja -C "$PROFILE_PATH" licenses_cpp
+
+  require_executable "$LICENSE_CPP"
+}
+
+run_license_generator() {
+  log "Executando gerador de licenças."
+  "$LICENSE_CPP"
+}
+
+main() {
+  initialize_paths
+
+  log "Repositório: $REPO_PATH"
+
+  validate_dependencies
+
+  cd -- "$WORKING_DIR"
+
+  sync_dependencies
+  generate_build_files
+  build_license_generator
+  run_license_generator
+
+  log "Processo concluído."
+}
+
+main "$@"
