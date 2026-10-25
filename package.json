@@ -1,32 +1,76 @@
+
 {
   "name": "awesome-proton",
   "version": "1.0.0",
-  "description": "List of games tested with Proton (Tool for Steam Client on Linux)",
-  "main": "build.js",
-  "scripts": {
-    "build": "node build.js"
+  "description": "List of games tested with Proton, the compatibility tool for Steam on Linux.",
+  "license": "CC0-1.0",
+  "author": {
+    "name": "Tiago Danin",
+    "url": "https://github.com/TiagoDanin"
   },
+  "homepage": "https://github.com/TiagoDanin/Awesome-Proton#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TiagoDanin/Awesome-Proton.git"
   },
+  "bugs": {
+    "url": "https://github.com/TiagoDanin/Awesome-Proton/issues"
+  },
   "keywords": [
-    "proton",
     "awesome",
     "awesome-list",
+    "proton",
     "steam",
-    "games",
-    "list"
+    "steam-play",
+    "protondb",
+    "linux",
+    "gaming",
+    "wine",
+    "compatibility"
   ],
-  "author": "Tiago Danin",
-  "license": "CC0-1.0",
-  "bugs": {
-    "url": "https://github.com/TiagoDanin/Awesome-Proton/"
+  "type": "commonjs",
+  "main": "build.js",
+  "engines": {
+    "node": ">=20 <25",
+    "npm": ">=10"
   },
-  "homepage": "https://github.com/TiagoDanin/Awesome-Proton#readme",
+  "packageManager": "npm@10.8.2",
+  "files": [
+    "build.js",
+    "src/",
+    "dist/"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "node build.js",
+    "start": "node build.js",
+    "rebuild": "npm run clean && npm run build",
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --runInBand",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run lint && npm test",
+    "audit": "npm audit",
+    "audit:fix": "npm audit fix",
+    "audit:ci": "npm audit --audit-level=high",
+    "ci": "npm run check && npm run test:coverage && npm run audit:ci && npm run rebuild",
+    "verify": "npm run ci"
+  },
   "dependencies": {
-    "chokidar": "^3.4.2",
-    "load-json-file": "^6.2.0",
+    "chokidar": "^4.0.0",
+    "load-json-file": "^7.0.1",
     "mustache": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2"
+  },
+  "volta": {
+    "node": "20.19.0",
+    "npm": "10.8.2"
   }
 }
